@@ -65,6 +65,7 @@ RUN set -eux; mkdir -p /opt/a2x/bin; \
 
 COPY worker /opt/worker/worker
 COPY scripts /opt/worker/scripts
+COPY rp_handler.py /opt/worker/rp_handler.py
 RUN chmod +x /opt/worker/scripts/*.sh
 WORKDIR /opt/worker
 CMD ["/opt/worker/scripts/start.sh"]

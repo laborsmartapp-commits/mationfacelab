@@ -6,4 +6,4 @@ if [ "${PREPARE_ON_START:-1}" = "1" ]; then
   # Warm the cache in the background so the first request waits less. Failures surface on the first job.
   (python3 -c "import prepare; prepare.ensure_prepared()" || true) &
 fi
-exec python3 -u handler.py
+exec python3 -u /opt/worker/rp_handler.py
