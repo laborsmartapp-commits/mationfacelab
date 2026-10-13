@@ -93,7 +93,7 @@ export default function Studio() {
       </header>
       <ResizablePanelGroup direction="horizontal" className="flex-1">
         <ResizablePanel defaultSize={24} minSize={18} className="flex flex-col">
-          <div className="flex gap-1 p-2 border-b overflow-x-auto">{PANELS.map((p) => (
+          <div className="flex flex-wrap gap-1 p-2 border-b">{PANELS.map((p) => (
             <button key={p} onClick={() => setPanel(p)} className={`px-3 py-1.5 rounded-lg text-xs ${panel === p ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}>{p}</button>))}</div>
           <div className="p-4 overflow-y-auto flex-1">
             {panel === "Character" && <CharacterPanel project={project} update={update} />}
