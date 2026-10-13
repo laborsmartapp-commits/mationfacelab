@@ -13,7 +13,7 @@ export default function Admin() {
     setBusy(true);
     let r = await call(mode === "config" ? {} : { [mode]: true });
     setStatus(r);
-    while (r.submitted || (r.poll && !r.done)) {
+    while (r.submitted || (r.poll && r.done === false)) {
       const id = r.submitted || r.poll;
       await new Promise((ok) => setTimeout(ok, 5000));
       r = { ...(await call({ poll: id })), poll: id };
