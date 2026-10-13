@@ -41,7 +41,8 @@ export default function Studio() {
     setJobs(j.items); setTakes(t.items); setProposals(pr.items);
   }, [id]);
 
-  useEffect(() => { base44.entities.Project.get(id).then(setProject); refresh(); }, [id]);
+  const [missing, setMissing] = useState(false);
+  useEffect(() => { base44.entities.Project.get(id).then(setProject).catch(() => setMissing(true)); refresh(); }, [id]);
   useEffect(() => { if (project?.character_uri) signedUrl(project.character_uri).then((u) => setUrls((s) => ({ ...s, character: u }))); }, [project?.character_uri]);
   useEffect(() => { if (project?.vocal_uri) signedUrl(project.vocal_uri).then((u) => setUrls((s) => ({ ...s, vocal: u }))); }, [project?.vocal_uri]);
 
@@ -81,6 +82,13 @@ export default function Studio() {
   };
   const onTime = () => { const a = audioRef.current; if (loop && a.currentTime > project.preview_end) a.currentTime = project.preview_start; };
 
+  if (missing) return (
+    <div className="h-screen flex flex-col items-center justify-center gap-4 text-center px-6">
+      <p className="font-heading text-2xl">Project not found</p>
+      <p className="text-muted-foreground text-sm">It may have been deleted, or you don't have access to it.</p>
+      <Link to="/" className="text-primary text-sm">Back to projects</Link>
+    </div>
+  );
   if (!project) return <div className="p-10 text-muted-foreground">Loading studio…</div>;
   return (
     <div className="h-screen flex flex-col">
