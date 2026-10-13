@@ -15,7 +15,7 @@ export default async function (req) {
 
     const s = await runpod(`status/${job.runpod_job_id}`);
     const status = MAP[s.status] || job.status;
-    if (status === 'failed') return Response.json({ job: await base44.entities.GenerationJob.update(job.id, { status, error: String(s.error || 'Worker failed').slice(0, 500) }) });
+    if (status === 'failed') return Response.json({ job: await base44.entities.GenerationJob.update(job.id, { status, error: (typeof s.error === 'string' ? s.error : JSON.stringify(s.error || 'Worker failed')).slice(0, 500) }) });
     if (status !== 'mapping') return Response.json({ job: await base44.entities.GenerationJob.update(job.id, { status }) });
 
     // Validate worker output schema before persisting.
@@ -26,7 +26,7 @@ export default async function (req) {
     const fresh = await base44.entities.GenerationJob.get(job.id);
     if (fresh.status === 'cancelled') return Response.json({ job: fresh }); // late completion after cancel is harmless
 
-    const animation = { schema: 'mationfacelab.a2f.v1', channels: out.channels, fps: out.fps, frames: out.frames, time_origin: job.range_start, duration: out.frames.length / out.fps, model_info: out.model_info || null, ranges: out.ranges || null };
+    const animation = { schema: 'mationfacelab.a2f.v1', channels: out.channels, fps: out.fps, frames: out.frames, time_origin: job.range_start, duration: out.frames.length / out.fps, model_info: out.model_info || null, ranges: out.ranges || null, timing: out.timing || null };
     const file = new File([JSON.stringify(animation)], `a2f-${job.id}.json`, { type: 'application/json' });
     const { file_uri } = await base44.asServiceRole.integrations.Core.UploadPrivateFile({ file });
     await base44.entities.Take.bulkCreate(['raw', 'intimate', 'expressive', 'stage'].map((style) => ({
