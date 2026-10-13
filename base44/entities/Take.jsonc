@@ -1,0 +1,57 @@
+{
+  "name": "Take",
+  "type": "object",
+  "properties": {
+    "project_id": {
+      "type": "string"
+    },
+    "label": {
+      "type": "string"
+    },
+    "style": {
+      "type": "string",
+      "enum": [
+        "raw",
+        "intimate",
+        "expressive",
+        "stage"
+      ]
+    },
+    "job_id": {
+      "type": "string"
+    },
+    "animation_uri": {
+      "type": "string"
+    },
+    "range_start": {
+      "type": "number"
+    },
+    "range_end": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "project_id",
+    "style"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "created_by_id": "{{user.id}}"
+    },
+    "delete": {
+      "created_by_id": "{{user.id}}"
+    }
+  }
+}

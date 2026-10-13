@@ -1,0 +1,61 @@
+{
+  "name": "DirectorProposal",
+  "type": "object",
+  "properties": {
+    "project_id": {
+      "type": "string"
+    },
+    "panel": {
+      "type": "string"
+    },
+    "request": {
+      "type": "string"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "operations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "applied",
+        "undone",
+        "dismissed"
+      ],
+      "default": "proposed"
+    },
+    "model": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "project_id"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "created_by_id": "{{user.id}}"
+    },
+    "delete": {
+      "created_by_id": "{{user.id}}"
+    }
+  }
+}

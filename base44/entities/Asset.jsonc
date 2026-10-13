@@ -1,0 +1,52 @@
+{
+  "name": "Asset",
+  "type": "object",
+  "properties": {
+    "kind": {
+      "type": "string",
+      "enum": [
+        "character",
+        "vocal",
+        "soundtrack",
+        "preset"
+      ]
+    },
+    "name": {
+      "type": "string"
+    },
+    "file_uri": {
+      "type": "string"
+    },
+    "size": {
+      "type": "number"
+    },
+    "meta": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "required": [
+    "kind",
+    "name"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "created_by_id": "{{user.id}}"
+    },
+    "delete": {
+      "created_by_id": "{{user.id}}"
+    }
+  }
+}

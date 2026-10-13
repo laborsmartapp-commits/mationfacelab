@@ -1,0 +1,89 @@
+{
+  "name": "GenerationJob",
+  "type": "object",
+  "properties": {
+    "project_id": {
+      "type": "string"
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "preview",
+        "full",
+        "connection_test"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "preparing",
+        "queued",
+        "generating",
+        "mapping",
+        "ready",
+        "failed",
+        "cancelled"
+      ],
+      "default": "preparing"
+    },
+    "runpod_job_id": {
+      "type": "string"
+    },
+    "idempotency_key": {
+      "type": "string"
+    },
+    "range_start": {
+      "type": "number"
+    },
+    "range_end": {
+      "type": "number"
+    },
+    "result_uri": {
+      "type": "string"
+    },
+    "error": {
+      "type": "string"
+    },
+    "model_info": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "execution_ms": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "kind"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
