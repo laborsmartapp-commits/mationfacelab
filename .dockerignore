@@ -3,3 +3,7 @@
 tests
 *.zip
 .env
+node_modules
+src
+base44
+dist
